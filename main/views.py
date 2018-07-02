@@ -15,7 +15,6 @@ from viberbot.api.viber_requests import ViberConversationStartedRequest, ViberFa
 
 import sched
 import shutil
-import traceback
 import threading
 import time
 import logging
@@ -65,7 +64,7 @@ def send_disclaimer(user_id: int, language: str):
 
 
 def link(request):
-    return HttpResponse('<a href="viber://pa?chatURI=supportpmu">Link to chat</a>')
+    return HttpResponse('<a href="viber://pa?chatURI=' + settings.CHAT_URI + '">Link to chat</a>')
 
 def send_email(subject, mail_text, mail, phone, viber_request):
     try:
@@ -89,8 +88,7 @@ def send_email(subject, mail_text, mail, phone, viber_request):
                 os.remove(fname)
     except Exception as e:
         logger.error(e)
-        logger.error("Mail wasn't delivered. Subject:%s, Text:%s, Phone:%s"%(subject, mail_text, phone))
-        traceback.print_exc()
+        logger.error("Mail wasn't delivered. Subject:%s, Text:%s, Phone:%s" % (subject, mail_text, phone))
 
 
 @csrf_exempt
@@ -259,6 +257,5 @@ def index(request):
                                         ])
     except Exception as e:
         logger.error(e)
-        traceback.print_exc()
     finally:
         return HttpResponse()
